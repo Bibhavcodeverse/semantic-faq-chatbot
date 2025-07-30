@@ -308,13 +308,12 @@ GitHub: [Bibhavcodeverse](https://github.com/Bibhavcodeverse)
 
 ## 📜 Certificate
 
-![Chatbot Project Certificate](Internship certificate.png)
+### 🏅 Internship Certificate
+<img src="internship_certificate.png" alt="Internship Certificate" width="600"/>
 
-<img src="Internship certificate.png" alt="Chatbot Project Certificate" width="600"/>
+### 📄 Recommendation Letter
+<img src="recommendation_letter.png" alt="Recommendation Letter" width="600"/>
 
-![Chatbot Project Certificate](recomanadation letter.png)
-
-<img src="recomanadation letter.png" alt="Chatbot Project Certificate" width="600"/>
 
 
 
