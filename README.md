@@ -306,13 +306,7 @@ GitHub: [Bibhavcodeverse](https://github.com/Bibhavcodeverse)
 
 ---
 
-## 🧾 Certificate
 
-### 🏅 Internship Certificate
-<img src="internship_certificate.png" alt="Internship Certificate" width="600"/>
-
-### 📄 Recommendation Letter
-<img src="recommendation_letter.png" alt="Recommendation Letter" width="600"/>
 
 
 
