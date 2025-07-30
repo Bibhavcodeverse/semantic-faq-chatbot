@@ -1,5 +1,3 @@
-Based on the extracted notebook, here's a **highly professional and detailed `README.md`** for your project:
-
 ---
 
 #  Semantic FAQ Chatbot with Next Question Prediction
@@ -135,16 +133,170 @@ The final chatbot:
 * Retrieves the **most accurate answer**.
 * Suggests a **next logical question** for seamless interaction.
 
----
 
-##  Future Enhancements
 
-*  Integrate with GPT-style models for next-question generation
-*  Improve next-question mapping using a classifier or T5
-*  Extend dataset with multilingual support
-*  Add vector-based similarity search using FAISS for scale
+##  Key Features of the Chatbot
+
+This chatbot goes far beyond basic query-answer matching. It replicates a **real-time smart assistant** with conversational context, memory, error tolerance, and user feedback collection.
 
 ---
+
+###  1. **Semantic Answer Retrieval**
+
+* The chatbot uses **`SentenceTransformer` embeddings** to find the **most semantically similar question** from a pre-trained FAQ dataset.
+* Even if users **rephrase the question**, the chatbot can identify the underlying intent and provide the correct answer.
+* It computes **cosine similarity** between user queries and existing FAQs to select the best answer.
+
+```python
+faq_embeddings = model.encode(faq_questions, convert_to_tensor=True)
+sims = util.cos_sim(query_vec, faq_embeddings)
+best_match = torch.argmax(sims)
+```
+
+---
+
+###  2. **Next-Question Prediction**
+
+* After answering a question, the bot can optionally suggest the **next logical question**.
+* This mimics a guided support conversation, improving UX and simulating **multi-turn dialogue**.
+
+```python
+next_question_map = dict(zip(faq_df["Question"], faq_df["Next Question"]))
+```
+
+**Example**:
+
+> **Q**: How can I apply for an internship?
+> **Bot**: You can apply through the official careers page.
+> Would you like to know: *What documents are needed to apply?*
+
+---
+
+###  3. **Duplicate Question Detection**
+
+* The chatbot keeps track of previously asked questions.
+* If the user repeats a question (or a very similar one), the bot detects it and confirms if the previous answer was helpful.
+
+```python
+def is_duplicate(query):
+    for prev_q in previous_questions:
+        sim = util.cos_sim(query_vec, prev_vec).item()
+        if sim > threshold:
+            return True
+```
+
+**Bot Response**:
+
+> You've already asked this or a similar question.
+> Did that answer resolve your query? (yes/no)
+
+---
+
+###  4. **Irrelevant Question Handling**
+
+* If the semantic similarity score is below a threshold (e.g., 0.5), the chatbot **flags the query as irrelevant**.
+* It allows a limited number of irrelevant questions before politely ending the session.
+
+```python
+if best_score < IRRELEVANT_THRESHOLD:
+    irrelevant_count += 1
+    if irrelevant_count > MAX_IRRELEVANT_LIMIT:
+        end_session()
+```
+
+---
+
+###  5. **Dynamic Related Question Suggestions**
+
+* If there's no next-question mapping, the bot suggests **top-3 semantically related FAQs** to continue the conversation.
+
+```python
+def get_related_questions(query, top_k=3):
+    # Suggest questions closest in meaning to the user’s query
+```
+
+---
+
+###  6. **User Contact Detail Capture**
+
+* On successful resolution or exit, the bot asks for user **name**, **email**, and **phone number** (optional).
+* It saves the data to `user_contacts.xlsx` for future follow-up or analysis.
+
+```python
+save_contact_to_excel(name, email, phone)
+```
+
+---
+
+###  7. **Feedback Collection**
+
+* At the end of the session or after timeout, users are asked to share their feedback.
+* Feedback is stored in `user_feedback.xlsx` for further improvement of the chatbot.
+
+```python
+save_feedback_to_excel(feedback)
+```
+
+---
+
+###  8. **Timeout Management**
+
+* If the user stays inactive beyond a timeout period (default: 300 seconds), the session ends automatically.
+* Feedback and contact collection are attempted before exit.
+
+```python
+inputimeout(prompt="You: ", timeout=TIMEOUT_SECONDS)
+```
+
+---
+
+###  9. **Logging & Session Safety**
+
+* Each interaction is **stateless per session**, but tracks questions asked to avoid duplication.
+* Bot ensures clean exit via `SystemExit` after proper contact and feedback collection.
+
+---
+
+##  Example Interaction
+
+```
+ Chatbot loaded. Ask a question or type 'exit' to quit.
+You: How do I apply for a job?
+Bot: You can apply at our careers page.
+Would you like to know: What documents are required?
+
+You: What documents are required?
+Bot: Please upload your resume, academic transcripts, and a cover letter.
+
+You: exit
+ Before you go, we'd love your feedback!
+ Your Feedback: Great experience!
+ Please share your contact details before exiting.
+ Your Name: John Doe
+ Your Email: john@example.com
+ Your Phone (optional): 9876543210
+ Bot: Thank you! Your details have been saved.
+ Bot: Session ended after successful interaction.
+```
+
+---
+
+##  Summary of Functional Flow
+
+| Feature                  | Purpose                                            |
+| ------------------------ | -------------------------------------------------- |
+| Semantic Retrieval       | Understand and match user intent using embeddings  |
+| Next Question Prediction | Suggest next question to guide the user            |
+| Duplicate Detection      | Avoid repetitive interactions                      |
+| Irrelevant Handling      | Control for off-topic questions                    |
+| Feedback Capture         | Gather user experience insights                    |
+| Contact Info Logging     | Optional user detail collection for future support |
+| Timeout Detection        | Gracefully exit idle sessions                      |
+| Related Questions        | Suggest meaningful follow-up questions             |
+
+---
+
+
 
 ## 👤 Author
 
