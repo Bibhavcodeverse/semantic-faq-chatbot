@@ -306,6 +306,12 @@ GitHub: [Bibhavcodeverse](https://github.com/Bibhavcodeverse)
 
 ---
 
+## 📜 Certificate
+
+![Chatbot Project Certificate](certificate.png)
+
+<img src="certificate.png" alt="Chatbot Project Certificate" width="600"/>
+
 
 
 
